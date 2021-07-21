@@ -204,6 +204,10 @@ If the given ID does not match an existing review, responds with status 404 and 
 
 ![Home page](/images/screenshot1.png)
 
+---
+
 ![Movie page](/images/screenshot2.png)
+
+---
 
 ![Theaters page](/images/screenshot3.png)
