@@ -7,9 +7,10 @@ This API server expresses the following endpoints:
 
 ## /movies Route
 
-### GET (optional param is_showing)
-Returns a list of movies in the following format:
-```{
+### GET /movies (optional param is_showing)
+Responds with a list of movies in the following format:
+```json
+{
   "data": [
     {
       "id": 1,
@@ -25,3 +26,77 @@ Returns a list of movies in the following format:
 ```
 
 If specified as `GET /movies?is_showing=true`, the route only returns those movies where the movie is currently showing in theaters.
+
+### GET /movies/:movieId
+Responds with a movie matching the corresponding movieId requested.
+
+Example: `GET /movies/1`
+Response:
+```json
+{
+  "data": {
+    "id": 1,
+    "title": "Spirited Away",
+    "runtime_in_minutes": 125,
+    "rating": "PG",
+    "description": "Chihiro...",
+    "image_url": "https://imdb-api.com/..."
+  }
+}
+```
+
+If no movie exists, an error will be returned as the response with status code 404: `{"error": "Movie cannot be found."}`
+
+### GET /movies/:movieId/theaters
+Responds with all theaters where the movie matching the requested movieId is playing.
+Example: `GET /movies/1/theaters`
+Response: 
+```json
+{
+  "data": [
+    {
+      "theater_id": 2,
+      "name": "Hollywood Theatre",
+      "address_line_1": "4122 NE Sandy Blvd.",
+      "address_line_2": "",
+      "city": "Portland",
+      "state": "OR",
+      "zip": "97212",
+      "created_at": "2021-02-23T20:48:13.342Z",
+      "updated_at": "2021-02-23T20:48:13.342Z",
+      "is_showing": true,
+      "movie_id": 1
+    }
+    // ...
+  ]
+}
+```
+
+### GET /movies/:movieId/reviews
+Responds with all reviews for the movie, including all of the critic details added to the `critic` key of the response.
+Example: `GET /movies/1/reviews`
+Response:
+```json
+{
+  "data": [
+    {
+      "review_id": 1,
+      "content": "Lorem markdownum ...",
+      "score": 3,
+      "created_at": "2021-02-23T20:48:13.315Z",
+      "updated_at": "2021-02-23T20:48:13.315Z",
+      "critic_id": 1,
+      "movie_id": 1,
+      "critic": {
+        "critic_id": 1,
+        "preferred_name": "Chana",
+        "surname": "Gibson",
+        "organization_name": "Film Frenzy",
+        "created_at": "2021-02-23T20:48:13.308Z",
+        "updated_at": "2021-02-23T20:48:13.308Z"
+      }
+    }
+    // ...
+  ]
+}
+```
