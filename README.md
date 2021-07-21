@@ -1,5 +1,5 @@
 This is a project that I completed for my Software Engineering Program in Thinkful.
-I wrote the database queries using Knex, as well as the express architecture.
+I wrote the database queries using Knex, designed the express architecture, and set up a staging database using ElephantSql.
 
 Technologies used: Node.js, Express, Knex.js, PostgreSql.
 
@@ -8,7 +8,9 @@ This API server expresses the following endpoints:
 ## /movies Route
 
 ### GET /movies (optional param is_showing)
+
 Responds with a list of movies in the following format:
+
 ```json
 {
   "data": [
@@ -28,10 +30,12 @@ Responds with a list of movies in the following format:
 If specified as `GET /movies?is_showing=true`, the route only returns those movies where the movie is currently showing in theaters.
 
 ### GET /movies/:movieId
+
 Responds with a movie matching the corresponding movieId requested.
 
 Example: `GET /movies/1`
 Response:
+
 ```json
 {
   "data": {
@@ -48,9 +52,11 @@ Response:
 If no movie exists, an error will be returned as the response with status code 404: `{"error": "Movie cannot be found."}`
 
 ### GET /movies/:movieId/theaters
+
 Responds with all theaters where the movie matching the requested movieId is playing.
 Example: `GET /movies/1/theaters`
-Response: 
+Response:
+
 ```json
 {
   "data": [
@@ -73,9 +79,11 @@ Response:
 ```
 
 ### GET /movies/:movieId/reviews
+
 Responds with all reviews for the movie, including all of the critic details added to the `critic` key of the response.
 Example: `GET /movies/1/reviews`
 Response:
+
 ```json
 {
   "data": [
@@ -98,5 +106,127 @@ Response:
     }
     // ...
   ]
+}
+```
+
+## /theaters Route
+
+### GET /theaters
+
+Responds with all theaters as well as all movies playing at each theater added to the `movie` key. Response looks like the following:
+
+```json
+{
+  "data": [
+    {
+      "theater_id": 1,
+      "name": "Regal City Center",
+      "address_line_1": "801 C St.",
+      "address_line_2": "",
+      "city": "Vancouver",
+      "state": "WA",
+      "zip": "98660",
+      "created_at": "2021-02-23T20:48:13.335Z",
+      "updated_at": "2021-02-23T20:48:13.335Z",
+      "movies": [
+        {
+          "movie_id": 1,
+          "title": "Spirited Away",
+          "runtime_in_minutes": 125,
+          "rating": "PG",
+          "description": "Chihiro...",
+          "image_url": "https://imdb-api.com...",
+          "created_at": "2021-02-23T20:48:13.342Z",
+          "updated_at": "2021-02-23T20:48:13.342Z",
+          "is_showing": false,
+          "theater_id": 1
+        }
+        // ...
+      ]
+    }
+    // ...
+  ]
+}
+```
+
+> **Hint** The `mapProperties` function that you created earlier is similar to the `.map()` method of an array. It must return the same number of elements (aka properties) as it is given.
+
+Using `mapProperties` with the following configuration will result in the movie related fields being mapped to a `movies` array:
+
+```js
+const mapProperties = require("../utils/map-properties");
+
+const data = [
+  {
+    theater_id: 1,
+    name: "Regal City Center",
+    movie_id: 1,
+    title: "Spirited Away",
+    rating: "PG",
+  },
+  {
+    theater_id: 1,
+    name: "Regal City Center",
+    movie_id: 2,
+    title: "Interstellar",
+    rating: "PG-13",
+  },
+];
+
+const addMovies = mapProperties({
+  movie_id: "movies[0].movie_id",
+  title: "movies[0].title",
+  rating: "movies[0].rating",
+});
+```
+
+## /reviews Route
+
+### PUT /reviews/:reviewId
+
+Partially or fully updates a review. If the ID is incorrect a `404` will be returned.
+
+A body like the following should be passed along with the request:
+
+```json
+{
+  "score": 3,
+  "content": "New content..."
+}
+```
+
+The response includes the entire review record with the newly patched content, and the critic information set to the `critic` property.
+
+```json
+{
+  "data": {
+    "review_id": 1,
+    "content": "New content...",
+    "score": 3,
+    "created_at": "2021-02-23T20:48:13.315Z",
+    "updated_at": "2021-02-23T20:48:13.315Z",
+    "critic_id": 1,
+    "movie_id": 1,
+    "critic": {
+      "critic_id": 1,
+      "preferred_name": "Chana",
+      "surname": "Gibson",
+      "organization_name": "Film Frenzy",
+      "created_at": "2021-02-23T20:48:13.308Z",
+      "updated_at": "2021-02-23T20:48:13.308Z"
+    }
+  }
+}
+```
+
+### DELETE /reviews/:reviewId
+
+Deletes review matching reviewId. Returns status `204 No Content`.
+
+If the given ID does not match an existing review, responds with status 404 and the following:
+
+```json
+{
+  "error": "Review cannot be found."
 }
 ```
