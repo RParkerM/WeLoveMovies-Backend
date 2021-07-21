@@ -149,37 +149,6 @@ Responds with all theaters as well as all movies playing at each theater added t
 }
 ```
 
-> **Hint** The `mapProperties` function that you created earlier is similar to the `.map()` method of an array. It must return the same number of elements (aka properties) as it is given.
-
-Using `mapProperties` with the following configuration will result in the movie related fields being mapped to a `movies` array:
-
-```js
-const mapProperties = require("../utils/map-properties");
-
-const data = [
-  {
-    theater_id: 1,
-    name: "Regal City Center",
-    movie_id: 1,
-    title: "Spirited Away",
-    rating: "PG",
-  },
-  {
-    theater_id: 1,
-    name: "Regal City Center",
-    movie_id: 2,
-    title: "Interstellar",
-    rating: "PG-13",
-  },
-];
-
-const addMovies = mapProperties({
-  movie_id: "movies[0].movie_id",
-  title: "movies[0].title",
-  rating: "movies[0].rating",
-});
-```
-
 ## /reviews Route
 
 ### PUT /reviews/:reviewId
@@ -230,3 +199,11 @@ If the given ID does not match an existing review, responds with status 404 and 
   "error": "Review cannot be found."
 }
 ```
+
+## Example using front-end
+
+![Home page](/images/Screenshot1.png)
+
+![Movie page](/images/Screenshot2.png)
+
+![Theaters page](/images/Screenshot3.png)
