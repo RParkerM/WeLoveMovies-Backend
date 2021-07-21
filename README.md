@@ -202,8 +202,8 @@ If the given ID does not match an existing review, responds with status 404 and 
 
 ## Example using front-end
 
-![Home page](/images/Screenshot1.png)
+![Home page](/images/screenshot1.png)
 
-![Movie page](/images/Screenshot2.png)
+![Movie page](/images/screenshot2.png)
 
-![Theaters page](/images/Screenshot3.png)
+![Theaters page](/images/screenshot3.png)
